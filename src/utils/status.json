@@ -1,0 +1,54 @@
+{
+  "user": {
+    "1": {
+      "label": "正常",
+      "type": "success",
+      "hint": "确定要恢复用户？"
+    },
+    "2": {
+      "label": "黑名单",
+      "type": "danger",
+      "hint": "确定要拉黑该用户？拉黑后该用户将无法登录。"
+    }
+  },
+  "lock": {
+    "1": {
+      "label": "未锁",
+      "type": "success"
+    },
+    "2": {
+      "label": "已锁",
+      "type": "danger"
+    }
+  },
+  "bankType": {
+    "1": {
+      "label": "正常",
+      "type": "success"
+    },
+    "2": {
+      "label": "禁用",
+      "type": "danger"
+    }
+  },
+  "bankKind": {
+    "1": {
+      "label": "常用卡",
+      "type": "success"
+    },
+    "2": {
+      "label": "历史卡",
+      "type": "danger"
+    }
+  },
+  "identity": {
+    "1": {
+      "label": "正式会员",
+      "type": "success"
+    },
+    "2": {
+      "label": "测试组",
+      "type": "danger"
+    }
+  }
+}
