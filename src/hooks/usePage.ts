@@ -11,7 +11,7 @@ const usePage = (
   newHandleCallback?: CallbackFn,
   editHandleCallback?: CallbackFn,
   // 对数据回写处理
-  writeBackCallback?: (row:any) => any,
+  writeBackCallback?: (row: any) => any,
 ) => {
   console.log(editHandleCallback);
   // 获取实例组件
@@ -28,8 +28,8 @@ const usePage = (
     contentRef.value?.fetchPageData(data, true);
   };
   // 重置
-  const handleResetClick = () => {
-    contentRef.value?.fetchPageData({}, true);
+  const handleResetClick = (queryInfo: any) => {
+    contentRef.value?.fetchPageData(queryInfo, true);
   };
 
   // 表单提交
@@ -57,10 +57,10 @@ const usePage = (
   const handleEditClick = (row: IObject) => {
     console.log("触发编辑hook", row);
     modalInfo.value = { ...row };
-    if(!!writeBackCallback){
+    if (!!writeBackCallback) {
       console.log(1)
       modalInfo.value = writeBackCallback(row);
-    }else{
+    } else {
       console.log(2)
       modalInfo.value = { ...row };
     }

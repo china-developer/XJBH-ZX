@@ -20,7 +20,6 @@ export const constantRoutes = [
     component: () => import("@/views/login/index.vue"),
     meta: { hidden: true },
   },
-
   {
     path: "/",
     name: "/",
@@ -43,7 +42,7 @@ export const constantRoutes = [
       {
         component: () => import("@/views/banks/index.vue"),
         name: "bank",
-        path: "bank",
+        path: "/bank",
         meta: {
           alwaysShow: false,
           hidden: false,
@@ -53,7 +52,6 @@ export const constantRoutes = [
           title: "r8"
         }
       },
-
       {
         path: "401",
         component: () => import("@/views/error/401.vue"),
@@ -63,18 +61,36 @@ export const constantRoutes = [
         path: "404",
         component: () => import("@/views/error/404.vue"),
         meta: { hidden: true },
-      },
-      {
-        path: "/user/setting",
-        component: () => import("@/views/usersetting/index.vue"),
-        meta: { hidden: true },
-      },
-      {
-        path: "/user/twoface",
-        component: () => import("@/views/twoFactorAuth/index.vue"),
-        meta: { hidden: true },
       }
     ],
+  },
+  {
+    path: "/bankUsers",
+    component: Layout,
+    name: "bankUsers",
+    redirect: "/bankUsers",
+    meta: {
+      alwaysShow: false,
+      hidden: false,
+      keepAlive: true,
+      icon: "users",
+      roles: ["ADMIN"]
+    },
+    children: [
+      {
+        component: () => import("@/views/bankUsers/index.vue"),
+        name: "bankUsers",
+        path: "/bankUsers",
+        meta: {
+          alwaysShow: false,
+          hidden: false,
+          keepAlive: true,
+          icon: "users",
+          roles: ["ADMIN"],
+          title: "r10"
+        }
+      }
+    ]
   },
 ];
 

@@ -3,17 +3,11 @@
     <template v-if="!isMobile">
       <!--全屏 -->
       <div class="setting-item" @click="toggle">
-        <svg-icon
-          :icon-class="isFullscreen ? 'fullscreen-exit' : 'fullscreen'"
-        />
+        <svg-icon :icon-class="isFullscreen ? 'fullscreen-exit' : 'fullscreen'" />
       </div>
 
       <!-- 布局大小 -->
-      <el-tooltip
-        :content="$t('sizeSelect.tooltip')"
-        effect="dark"
-        placement="bottom"
-      >
+      <el-tooltip :content="$t('sizeSelect.tooltip')" effect="dark" placement="bottom">
         <size-select class="setting-item" />
       </el-tooltip>
 
@@ -24,20 +18,17 @@
     <!-- 用户头像 -->
     <el-dropdown class="setting-item" trigger="click">
       <div class="flex-center h100% p10px">
-        <img
-          :src="userStore.user.avatar + '?imageView2/1/w/80/h/80'"
-          class="rounded-full mr-10px w24px w24px"
-        />
+        <img :src="userStore.user.avatar + '?imageView2/1/w/80/h/80'" class="rounded-full mr-10px w24px w24px" />
         <span>{{ userStore.user.username }}</span>
       </div>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="jumpTo('/user/setting')">
+          <!-- <el-dropdown-item @click="jumpTo('/user/setting')">
             {{ $t("navbar.userset") }}
           </el-dropdown-item>
           <el-dropdown-item @click="jumpTo('/user/twoface')">
             {{ $t("navbar.twoface") }}
-          </el-dropdown-item>
+          </el-dropdown-item> -->
           <el-dropdown-item divided @click="logout">
             {{ $t("navbar.logout") }}
           </el-dropdown-item>
@@ -68,7 +59,7 @@ const userStore = useUserStore();
 const settingStore = useSettingsStore();
 const route = useRoute();
 const router = useRouter();
-const { t } = useI18n(); 
+const { t } = useI18n();
 const isMobile = computed(() => appStore.device === DeviceEnum.MOBILE);
 
 const { isFullscreen, toggle } = useFullscreen();
@@ -84,7 +75,7 @@ async function logout() {
       background: "rgba(0, 0, 0, 0.7)",
     });
 
-    await ElMessageBox.confirm(t('logout.message'),t('logout.tip'), {
+    await ElMessageBox.confirm(t('logout.message'), t('logout.tip'), {
       confirmButtonText: t('logout.confirm'),
       cancelButtonText: t('logout.cancel'),
       type: "warning",
@@ -138,6 +129,7 @@ function jumpTo(path) {
 
 .layout-top,
 .layout-mix {
+
   .setting-item,
   .el-icon {
     color: var(--el-color-white);

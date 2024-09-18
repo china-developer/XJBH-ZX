@@ -21,7 +21,6 @@ const ZXRequest = new Request({
       const userStore = useUserStore();
       // 验证token
       const accessToken = localStorage.getItem(TOKEN_KEY);
-      console.log('accessToken==>', accessToken)
       if (accessToken && accessToken != "undefined") {
         if (isCheckTimeout()) {
           // Token过期

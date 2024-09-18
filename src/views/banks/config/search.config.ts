@@ -11,6 +11,13 @@ export const searchFormConfig: IForm = {
         placeholder: "name",
       },
       rules: [],
+      // async initFn(formItem) {
+      //   // 注意:如果initFn函数不是箭头函数,this会指向此配置项对象,那么也就可以用this来替代形参formItem
+      //   const response = localStorage.getItem(OptionsTypesEnum.CURRENCY);
+      //   if (response) {
+      //     this.options! = Array.from(Object.values(JSON.parse(response))) as ISelectOption[];
+      //   }
+      // },
       colLayout: {
         xl: 4, // ≥1920px
         lg: 6, // ≥1200px

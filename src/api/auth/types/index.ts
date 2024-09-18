@@ -2,6 +2,7 @@
 export interface LoginResult {
   /** 访问token */
   access_token?: string;
+  refresh_token?: string;
   /** 过期时间(单位：毫秒) */
   expires?: number;
   /** 刷新token */

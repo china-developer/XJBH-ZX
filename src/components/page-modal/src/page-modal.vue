@@ -1,11 +1,6 @@
 <template>
   <div class="page-modal">
-    <el-dialog
-      v-model="dialogVisible"
-      :width="dialogWidth"
-      align-center
-      destroy-on-close
-    >
+    <el-dialog v-model="dialogVisible" :width="dialogWidth" align-center destroy-on-close>
       <template #header>
         <div class="my-header">
           <span>{{ tf(modalConfig.title) }}</span>
@@ -16,12 +11,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">{{ tf('cancel') }}</el-button>
-          <el-button
-            type="primary"
-            @click="handleConfirmClick"
-            :loading="loadingStatus"
-            >{{ tf('confirm') }}</el-button
-          >
+          <el-button type="primary" @click="handleConfirmClick" :loading="loadingStatus">{{ tf('confirm') }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -107,7 +97,7 @@ const handleConfirmClick = useThrottleFn(async () => {
       .then((res: object) => {
         let msg = tf('message7');
         if (props.modalConfig.title) {
-          msg = tf(props.modalConfig.title)+tf('success');
+          msg = tf(props.modalConfig.title) + tf('success');
         }
         ElMessage.success(msg);
         emit("submitClick");
@@ -147,10 +137,12 @@ defineExpose({
   font-size: 16px;
   font-weight: bold;
   color: #606060;
+
   & span {
     display: flex;
     align-items: center;
   }
+
   & span::before {
     content: "";
     display: inline-block;

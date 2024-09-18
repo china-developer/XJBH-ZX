@@ -7,6 +7,7 @@ enum AuthEnum {
   Csrf = "/sanctum/csrf-cookie",
   Logout = "/logout",
   DelTokens = "/api/admin/auth/tokens",
+  RefTokens = "/api/cert/token/refresh",
 
   // 双重验证
   twoFactorOn = "/user/two-factor-authentication",
@@ -39,6 +40,11 @@ class AuthAPI {
   // 删除token
   static delTokens(): AxiosPromise {
     return ZXRequest.delete<any>(AuthEnum.DelTokens);
+  }
+
+  // 刷新token
+  static refTokens(): AxiosPromise {
+    return ZXRequest.get<any>(AuthEnum.RefTokens);
   }
 
   // 双因素认证 获取二维码

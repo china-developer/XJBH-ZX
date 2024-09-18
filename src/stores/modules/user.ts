@@ -1,5 +1,5 @@
 import router, { resetRouter } from "@/router";
-import { TOKEN_KEY } from "@/enums/CacheEnum";
+import { TOKEN_KEY, REF_TOKEN_KEY } from "@/enums/CacheEnum";
 import { store } from "@/stores";
 import AuthAPI, { LoginData } from "@/api/auth";
 import UserAPI from "@/api/user";
@@ -30,6 +30,7 @@ export const useUserStore = defineStore("user", () => {
           // 保存登录时间
           setTimeStamp()
           localStorage.setItem(TOKEN_KEY, res.data.access_token!);
+          localStorage.setItem(REF_TOKEN_KEY, res.data.refresh_token!);
           resolve();
         })
         .catch((error) => {
@@ -80,17 +81,21 @@ export const useUserStore = defineStore("user", () => {
   function logout() {
     return new Promise<void>((resolve, reject) => {
       // 退出登录  注销Token 清除Token
-      AuthAPI.delTokens()
-        .then(() => {
-          location.reload(); // 清空路由
-          resetToken()
-          resetRouter(); // 重置路由
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        })
-        .finally(() => { });
+      location.reload(); // 清空路由
+      resetToken()
+      resetRouter(); // 重置路由
+      resolve();
+      // AuthAPI.delTokens()
+      //   .then(() => {
+      //     location.reload(); // 清空路由
+      //     resetToken()
+      //     resetRouter(); // 重置路由
+      //     resolve();
+      //   })
+      //   .catch((error) => {
+      //     reject(error);
+      //   })
+      //   .finally(() => { });
     });
   }
 

@@ -1,18 +1,17 @@
 <template>
   <div class="users-container">
-    <!-- <el-card class="search-container">
+    <el-card class="search-container">
       <page-search :searchConfig="searchFormConfig" @queryBtnClick="handleSearchClick"
         @resetBtnClick="handleResetClick" />
-    </el-card> -->
+    </el-card>
     <el-card shadow="never" class="table-container">
-      <page-content ref="contentRef" :contentConfig="<IContentConfig>contentTableConfig" @newBtnClick="handleAddClick"
-        @editBtnClick="handleEditClick" @exportBtnClick="handleExportClick" isOut />
+      <page-content ref="contentRef" :parameterVal="searchFormData" :contentConfig="<IContentConfig>contentTableConfig"
+        @newBtnClick="handleAddClick" @editBtnClick="handleEditClick" @exportBtnClick="handleExportClick" isOut />
     </el-card>
 
     <!-- 新建表单弹窗 -->
     <page-modal ref="addModalRef" pageName="users" dialog-width="600px" @submit-click="handleSubmitClick"
       :modalConfig="modelConfigAdd" :defaultInfo="modalInfo" />
-
     <!-- 编辑表单弹窗 -->
     <page-modal ref="editModalRef" pageName="users" dialog-width="600px" @submit-click="handleSubmitClick"
       :modalConfig="modelConfigEdit" :defaultInfo="modalInfo" />
@@ -41,6 +40,15 @@ const setLoading = (value: boolean) => {
 };
 provide("loading", loading);
 provide("setLoading", setLoading);
+
+// 默认请求值
+const searchFormData = ref({
+  bank: "",
+  username: "",
+  acct: "",
+  uid: "",
+  status: true,
+})
 
 // 处理的hook
 const {

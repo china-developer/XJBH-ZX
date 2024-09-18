@@ -97,9 +97,9 @@
       <!-- 生成开关组件 -->
       <template #switch="{ row, col }">
         <!-- pageData.length>0: 解决el-switch组件会在表格初始化的时候触发一次change事件 -->
-        <el-switch v-model="row[col.prop]" :active-value="col.activeValue ?? 1" :inactive-value="col.inactiveValue ?? 0"
-          :inline-prompt="true" :active-text="col.activeText ?? ''" :inactive-text="col.inactiveText ?? ''"
-          :validate-event="false" @change="
+        <el-switch v-model="row[col.prop]" :active-value="col.activeValue ?? 1" disabled
+          :inactive-value="col.inactiveValue ?? 0" :inline-prompt="true" :active-text="col.activeText ?? ''"
+          :inactive-text="col.inactiveText ?? ''" :validate-event="false" @change="
             pageData.length > 0 && handleModify(col.prop, row[col.prop], row)
             " />
       </template>
@@ -198,7 +198,7 @@
           </el-button>
           <el-button @click="handleCloseExportsModal">{{
             tt("cancel")
-          }}</el-button>
+            }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -370,7 +370,7 @@ function handleModify(
       value: value,
     });
   } else {
-    ElMessage.error(t('el.message4'));
+    // ElMessage.error(t('el.message4'));
   }
 }
 

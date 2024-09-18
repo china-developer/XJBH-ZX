@@ -5,11 +5,11 @@ import BanksAPI from '@/api/bank'
 
 export const modalConfig: IForm = {
   formAction: function (data, isEdit) {
-    let id = data.id;
-    let param = {
-      code: data.code,
-      name: data.name,
-    }
+    // let id = data.id;
+    // let param = {
+    //   code: data.code,
+    //   name: data.name,
+    // }
     if (isEdit) {
       return BanksAPI.updateBanksPage(data);
     } else {

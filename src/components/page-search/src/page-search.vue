@@ -1,28 +1,12 @@
 <template>
   <div>
-    <hy-form
-      ref="formRef"
-      v-bind="searchConfig"
-      @custom-event="handleCustomEvent"
-      v-model="formData"
-      :loading="loading"
-      :isFilter="true"
-    >
+    <hy-form ref="formRef" v-bind="searchConfig" @custom-event="handleCustomEvent" v-model="formData" :loading="loading"
+      :isFilter="true">
       <template #filterBtns>
         <div class="filterBtns ml-5">
-          <el-button
-            :icon="Refresh"
-            @click="handleResetClick"
-            :disabled="loading"
-            >{{tf('reset')}}</el-button
-          >
-          <el-button
-            type="primary"
-            :icon="Search"
-            @click="handleQueryClick"
-            :disabled="loading"
-            >{{tf('search')}}</el-button
-          >
+          <el-button :icon="Refresh" @click="handleResetClick" :disabled="loading">{{ tf('reset') }}</el-button>
+          <el-button type="primary" :icon="Search" @click="handleQueryClick"
+            :disabled="loading">{{ tf('search') }}</el-button>
         </div>
       </template>
     </hy-form>
@@ -54,7 +38,7 @@ const originFormData: IFormData = {};
 const formItems = props.searchConfig.formItems ?? [];
 for (const formItem of formItems) {
   formItem.initFn && formItem.initFn(formItem);
-  originFormData[`${formItem.prop}`] = formItem.defaultValue ??"";
+  originFormData[`${formItem.prop}`] = formItem.defaultValue ?? "";
 }
 
 const formData = ref<IFormData>({ ...originFormData });
@@ -78,18 +62,18 @@ const handleResetClick = () => {
   if (transferDate.value.length > 0) {
     formData.value.day = transferDate.value;
     handleQueryClick();
-  } else if(!!formData.value.currency_id){
+  } else if (!!formData.value.currency_id) {
     // 如果条件筛选币种有默认值，则执行查询事件
     handleQueryClick();
-  }else {
-    emit("resetBtnClick");
+  } else {
+    emit("resetBtnClick", formData.value);
   }
 };
 
 // 条件筛选
 const handleQueryClick = () => {
   // 输出新的数据对象
-  console.log("触发条件查询", {...formData.value});
+  console.log("触发条件查询", { ...formData.value });
   emit("queryBtnClick", formData.value);
 };
 
