@@ -65,10 +65,10 @@ export const constantRoutes = [
     ],
   },
   {
-    path: "/bankUsers",
+    path: "/users",
     component: Layout,
-    name: "bankUsers",
-    redirect: "/bankUsers",
+    name: "users",
+    redirect: "/users",
     meta: {
       alwaysShow: false,
       hidden: false,
@@ -78,9 +78,9 @@ export const constantRoutes = [
     },
     children: [
       {
-        component: () => import("@/views/bankUsers/index.vue"),
-        name: "bankUsers",
-        path: "/bankUsers",
+        component: () => import("@/views/users/index.vue"),
+        name: "users",
+        path: "/users",
         meta: {
           alwaysShow: false,
           hidden: false,

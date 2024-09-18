@@ -10,7 +10,7 @@ export default {
     r7: "Recharge Settings",
     r8: "Bank",
     r9: "Currency",
-    r10: "Withdrawal",
+    r10: "Account",
     r11: "Recharge Record",
     r12: "Collection",
     r13: "Collection order",

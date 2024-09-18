@@ -34,8 +34,9 @@ const usePage = (
 
   // 表单提交
   function handleSubmitClick() {
+    const searchObj = Object.assign({},searchRef.value.formData)
     //根据检索条件刷新列表数据
-    contentRef.value?.fetchPageData({}, true);
+    contentRef.value?.fetchPageData(searchObj, true);
   }
 
   // 新增

@@ -79,6 +79,10 @@ const handleQueryClick = () => {
 
 // 使用inject注入setChildBLoading函数
 const loading = inject<any>('loading');
+
+defineExpose({
+  formData
+})
 </script>
 
 <style scoped>

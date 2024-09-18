@@ -1,11 +1,11 @@
-import BankUsersAPI from "@/api/bankUsers";
+import UsersAPI from "@/api/users";
 import { IContentConfig } from "@/components/page-content";
 
 export const contentTableConfig: IContentConfig = {
   title: "",
   pk: "code",
   indexAction: function (queryParams: any) {
-    return BankUsersAPI.getUsersPage(queryParams);
+    return UsersAPI.getUsersPage(queryParams);
   },
   // deleteAction: function (ids) {
   //   return BankUsersAPI.deleteBanksPage(ids);

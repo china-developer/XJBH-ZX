@@ -1,6 +1,6 @@
 import { IForm, ISelectOption } from '@/base-ui/form'
 import { OptionsTypesEnum } from '@/enums/OptionsEnum'
-import BankUsersAPI from '@/api/bankUsers'
+import BankUsersAPI from '@/api/users'
 
 
 export const modalConfig: IForm = {
@@ -17,14 +17,14 @@ export const modalConfig: IForm = {
     }
   },
   formItems: [
-    // {
-    //   prop: "id",
-    //   type: "input",
-    //   label: "id",
-    //   attrs: {
-    //     placeholder: "请输入id",
-    //   },
-    // },
+    {
+      prop: "id",
+      type: "input",
+      label: "id",
+      attrs: {
+        placeholder: "请输入id",
+      },
+    },
     {
       prop: "username",
       type: "input",

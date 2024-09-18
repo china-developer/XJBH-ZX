@@ -10,7 +10,7 @@ export default {
     r7: "Cài đặt nạp tiền",
     r8: "Ngân hàng",
     r9: "Tiền tệ",
-    r10: "Rút tiền",
+    r10: "Quản lý tài khoản",
     r11: "Bản ghi nạp tiền",
     r12: "Thu hộ",
     r13: "Đặt hàng thay thế",

@@ -7,7 +7,6 @@ import axios, {
 import { ErrMessage } from "./status";
 import { TOKEN_KEY, REF_TOKEN_KEY } from "@/enums/CacheEnum";
 import router from "@/router";
-import AuthAPI from '@/api/auth';
 import { jwtDecode } from "jwt-decode";
 
 // 自定义请求返回数据的类型
@@ -97,8 +96,30 @@ class Request {
       refreshSubscribers.push(cb);
     };
 
+    const handleRefreshToken = async (refreshToken: string) => {
+      try {
+        const { data } = await axios.get('/api/cert/token/refresh', {
+          headers: {
+            'Authorization': `Bearer ${refreshToken}`,
+          },
+        });
+
+        const newToken = data.access_token;
+        const newRefToken = data.refresh_token;
+
+        localStorage.setItem(TOKEN_KEY, newToken);
+        localStorage.setItem(REF_TOKEN_KEY, newRefToken);
+
+        return newToken;
+      } catch (err) {
+        localStorage.setItem(TOKEN_KEY, "");
+        router.push(`/login`);
+        return Promise.reject(err);
+      }
+    };
+
     /**
-    * 通用拦截
+    * 添加请求拦截器
     */
     this.instance.interceptors.request.use(
       async (config: RequestInternalAxiosRequestConfig) => {
@@ -108,30 +129,30 @@ class Request {
         }
         let token = localStorage.getItem(TOKEN_KEY);
         if (token) {
+          // 解析 token
           const decodedToken: any = jwtDecode(token);
           const currentTime = Date.now() / 1000;
+
+          // 如果 token 已过期
           if (decodedToken.exp < currentTime) {
             console.log('失效了===>', decodedToken.exp)
             // Token 已过期，使用 refreshToken 获取新的 token
             const refreshToken = localStorage.getItem(REF_TOKEN_KEY);
+
             if (!isRefreshing) {
               isRefreshing = true;
-              config.headers.Authorization = `Bearer ${refreshToken}`;
               try {
-                const { data } = await AuthAPI.refTokens();
-                token = data.access_token;
-                const newRefToken = data.refresh_token;
-                localStorage.setItem(TOKEN_KEY, token!);
-                localStorage.setItem(REF_TOKEN_KEY, newRefToken);
+                token = await handleRefreshToken(refreshToken!);
+                // 将新的 token 添加到请求头
+                config.headers.Authorization = `Bearer ${token}`;
                 isRefreshing = false;
                 onRrefreshed(token!);
               } catch (err) {
-                localStorage.setItem(TOKEN_KEY, "");
-                router.push(`/login`);
                 return Promise.reject(err);
               }
             }
           } else {
+            // 如果 token 未过期，将 token 添加到请求头
             config.headers.Authorization = `Bearer ${token}`;
           }
 
@@ -149,34 +170,29 @@ class Request {
       async (err) => {
         const { response, message } = err;
         const originalRequest = err.config;
+
+
         if (this.loading) this.loading = false;
 
         // 处理401 登录失败
-        if (response?.status === 401) {
-          // if (!isRefreshing) {
-          //   isRefreshing = true;
-          //   try {
-          //     const { data } = await AuthAPI.refTokens();
-          //     const newToken = data.access_token;
-          //     const newRefToken = data.refresh_token;
-          //     localStorage.setItem(TOKEN_KEY, newToken);
-          //     localStorage.setItem(REF_TOKEN_KEY, newRefToken);
-          //     isRefreshing = false;
-          //     onRrefreshed(newToken);
-          //   } catch (err) {
-          //     localStorage.setItem(TOKEN_KEY, "");
-          //     router.push(`/login`);
-          //     return Promise.reject(err);
-          //   }
-          // }
+        if (response?.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true;
+          if (!isRefreshing) {
+            isRefreshing = true;
+            const refreshToken = localStorage.getItem(REF_TOKEN_KEY);
+            try {
+              const newToken = await handleRefreshToken(refreshToken!);
+              isRefreshing = false;
 
-          // const retryOriginalRequest = new Promise((resolve) => {
-          //   addRefreshSubscriber((token: string) => {
-          //     originalRequest.headers.Authorization = `Bearer ${token}`;
-          //     resolve(this.instance(originalRequest));
-          //   });
-          // });
-          // return retryOriginalRequest;
+              onRrefreshed(newToken);
+              // 将新的 token 添加到请求头
+              originalRequest.headers.Authorization = `Bearer ${newToken}`;
+              // 重新发起请求
+              return this.instance(originalRequest);
+            } catch (err) {
+              return Promise.reject(err);
+            }
+          }
         }
 
         // 处理 422 验证错误
