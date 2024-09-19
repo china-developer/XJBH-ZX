@@ -8,35 +8,15 @@
         </div>
       </slot>
     </div>
-    <el-table
-      :row-key="pk"
-      v-loading="loading"
-      :data="listData"
-      border
-      @selection-change="selectionChange"
-      v-bind="childrenProps"
-    >
-      <el-table-column
-        v-if="showSelectColumn"
-        type="selection"
-        align="center"
-        width="60"
-      ></el-table-column>
-      <el-table-column
-        v-if="showIndexColumn"
-        type="index"
-        :label="tt('tr1')"
-        align="center"
-        width="80"
-      ></el-table-column>
+    <el-table :row-key="pk" v-loading="loading" :data="listData" border @selection-change="selectionChange"
+      v-bind="childrenProps">
+      <el-table-column v-if="showSelectColumn" type="selection" align="center" width="60"></el-table-column>
+      <el-table-column v-if="showIndexColumn" type="index" :label="tt('tr1')" align="center"
+        width="80"></el-table-column>
       <template v-for="item in propList" :key="item.prop">
-        <el-table-column
-          v-bind="item"
-          :label="tt(item.label)"
-          :align="item.align ?? 'left'"
+        <el-table-column v-bind="item" :label="tt(item.label)" :align="item.align ?? 'left'"
           :minWidth="item.minWidth ?? colObj[item.prop].width"
-          :show-overflow-tooltip="item.showOverflowTooltip ?? false"
-        >
+          :show-overflow-tooltip="item.showOverflowTooltip ?? false">
           <template #default="scope">
             <slot :name="item.slotName" :row="scope.row" :col="item">
               {{ scope.row[item.prop] }}
@@ -45,10 +25,7 @@
           <template v-if="item.slotName === 'header'" #header>
             <div>
               {{ tt(item.label) }}
-              <el-tooltip
-                v-bind="item.headerTipAttrs.tipAttrs"
-                :content="tt(item.headerTipAttrs.tipAttrs.content)"
-              >
+              <el-tooltip v-bind="item.headerTipAttrs.tipAttrs" :content="tt(item.headerTipAttrs.tipAttrs.content)">
                 <svg-icon v-bind="item.headerTipAttrs.iconAttrs" />
               </el-tooltip>
             </div>
@@ -59,13 +36,8 @@
     </el-table>
     <div class="footer" v-if="showPagination">
       <slot name="footer">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          v-bind="page"
-          :page-size="page.per_page"
-          :current-page="page.page"
-        >
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" v-bind="page"
+          :page-size="page.per_page" :current-page="page.page">
         </el-pagination>
       </slot>
     </div>
@@ -159,7 +131,7 @@ function calColWidth(propList: Array<{}>, listData: IObject[]) {
       }
     });
   }
-  console.log(res);
+  // console.log(res);
   return res;
 }
 
@@ -168,7 +140,7 @@ let colObj = computed(() => calColWidth(props.propList, props.listData));
 watch(
   () => props.listData,
   () => {
-    console.log("colObj====>", colObj.value);
+    // console.log("colObj====>", colObj.value);
   },
   {
     deep: true,
@@ -179,7 +151,7 @@ const emit = defineEmits(["selectionChange", "update:page"]);
 
 // 上一页
 const selectionChange = (value: any) => {
-  console.log(1, value);
+  // console.log(1, value);
   if (props.showSelectColumn) {
     emit("selectionChange", value);
   }

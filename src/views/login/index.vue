@@ -168,10 +168,9 @@ const handleLogin = () => {
             }
             return acc;
           }, {});
-          // 获取表格表单【币种】配置信息
-          // await optionsStore.getInitalCurrencyData();
-          // 获取表格表单【供应商】配置信息
-          //  await optionsStore.getInitalPurveyorData();
+
+          // await optionsStore.getInitalBankOptions();
+
           // 成功跳转页面
           router.push({ path: redirect, query: otherQueryParams });
         })

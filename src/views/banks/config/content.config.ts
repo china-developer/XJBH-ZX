@@ -3,7 +3,7 @@ import { IContentConfig } from "@/components/page-content";
 
 export const contentTableConfig: IContentConfig = {
   title: "",
-  pk: "code",
+  pk: "id",
   indexAction: function (queryParams: any) {
     return BanksAPI.getBanksPage(queryParams);
   },

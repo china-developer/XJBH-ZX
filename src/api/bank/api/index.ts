@@ -7,6 +7,7 @@ import { BanksPageVO, WithdrawPageVO } from "../types";
  */
 enum BanksEnum {
   ListPage = "/api/bank/list",
+  OpationsPage = "/api/bank/dropDown",
   SavePage = "/api/bank/save",
   DelPage = "/api/bank/delete"
 }
@@ -20,11 +21,12 @@ class BanksAPI {
   }
 
   /**
-   * 创建银行数据
+   * 银行下拉数据
    */
-  // static postBanksPage(data:object): AxiosPromise<PageResult<BanksPageVO[]>> {
-  //   return ZXRequest.post<any>(BanksEnum.BanksPage,data);
-  // }
+  static getBanksOptions(): AxiosPromise<any> {
+    return ZXRequest.get<any>(BanksEnum.OpationsPage);
+  }
+
 
   /**
    * 更新银行数据

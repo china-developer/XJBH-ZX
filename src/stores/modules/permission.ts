@@ -17,7 +17,7 @@ import { MenuTestVO } from "./test/type";
  * @param route 路由
  * @returns
  */
-const hasPermission = (roles:string[], route:any) => {
+const hasPermission = (roles: string[], route: any) => {
   if (route.meta && route.meta.roles) {
     // 角色【超级管理员】拥有所有权限，忽略校验
     if (roles.includes("ROOT")) {
@@ -39,7 +39,7 @@ const hasPermission = (roles:string[], route:any) => {
  * @param roles 用户角色集合
  * @returns 返回用户有权限的动态路由
  */
-const filterAsyncRoutes = (routes:RouteVO[], roles:string[]) => {
+const filterAsyncRoutes = (routes: RouteVO[], roles: string[]) => {
   const asyncRoutes: RouteRecordRaw[] = [];
   routes.forEach((route) => {
     const tmpRoute = { ...route } as RouteRecordRaw;; // 深拷贝 route 对象 避免污染
@@ -73,8 +73,8 @@ export const usePermissionStore = defineStore("permission", () => {
   const routes = ref<RouteRecordRaw[]>([]);
 
   // actions
-  function setRoutes(newRoutes:any) {
-    console.log(newRoutes);
+  function setRoutes(newRoutes: any) {
+    // console.log(newRoutes);
     routes.value = constantRoutes.concat(newRoutes);
   }
 
@@ -84,7 +84,7 @@ export const usePermissionStore = defineStore("permission", () => {
    * @param roles 用户角色集合
    * @returns
    */
-  function generateRoutes(roles:string[]) {
+  function generateRoutes(roles: string[]) {
     return new Promise<RouteRecordRaw[]>((resolve, reject) => {
       // 接口获取所有路由
       // listRoutes()
@@ -95,12 +95,12 @@ export const usePermissionStore = defineStore("permission", () => {
       // }
       asyncRoutes = [...asyncRoutes, ...(menuJson as MenuTestVO)[roles[0]]]
       // asyncRoutes[0].children.push(...userRoutes)
-      console.log("asyncRoutes", asyncRoutes);
+      // console.log("asyncRoutes", asyncRoutes);
       // 正常
       // 根据角色获取有访问权限的路由
       const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
 
-      console.log("accessedRoutes==>", accessedRoutes);
+      // console.log("accessedRoutes==>", accessedRoutes);
 
       setRoutes(accessedRoutes);
       resolve(accessedRoutes);

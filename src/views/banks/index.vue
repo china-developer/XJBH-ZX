@@ -6,7 +6,7 @@
     </el-card> -->
     <el-card shadow="never" class="table-container">
       <page-content ref="contentRef" :contentConfig="<IContentConfig>contentTableConfig" @newBtnClick="handleAddClick"
-        @editBtnClick="handleEditClick" @exportBtnClick="handleExportClick" isOut />
+        @editBtnClick="handleEditClick" @exportBtnClick="handleExportClick" />
     </el-card>
 
     <!-- 新建表单弹窗 -->
@@ -34,6 +34,7 @@ watchSwitchLang(() => {
   searchFormConfig
 })
 
+
 // 查询 - 表格 联动默认状态
 const loading = ref(false);
 const setLoading = (value: boolean) => {
@@ -52,8 +53,6 @@ const {
   handleAddClick,
   handleSubmitClick,
   handleExportClick,
-  handleSearchClick,
-  handleResetClick,
 } = usePage();
 </script>
 

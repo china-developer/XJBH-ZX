@@ -3,85 +3,41 @@
     <div class="header">
       <slot name="header"></slot>
     </div>
-    <el-form
-      ref="formRef"
-      :model="formData"
-      :rules="formRules"
-      :label-width="labelWidth || 'auto'"
-    >
+    <el-form ref="formRef" :model="formData" :rules="formRules" :label-width="labelWidth || 'auto'">
       <el-row :gutter="20">
         <template v-for="(item, index) in formItems" :key="index">
-          <el-col
-            :xs="getColLayout(item, 'xs')"
-            :sm="getColLayout(item, 'sm')"
-            :md="getColLayout(item, 'md')"
-            :lg="getColLayout(item, 'lg')"
-            :xl="getColLayout(item, 'xl')"
-            :offset="getOffset(item)"
-          >
-            <el-form-item
-              class="form-item"
-              :prop="item.prop"
-              :label="tf(item.label ?? '')"
-              v-if="!item.isHidden"
-            >
+          <el-col :xs="getColLayout(item, 'xs')" :sm="getColLayout(item, 'sm')" :md="getColLayout(item, 'md')"
+            :lg="getColLayout(item, 'lg')" :xl="getColLayout(item, 'xl')" :offset="getOffset(item)">
+            <el-form-item class="form-item" :prop="item.prop" :label="tf(item.label ?? '')" v-if="!item.isHidden">
               <!-- 输入框 -->
-              <template
-                v-if="item.type === 'input' || item.type === 'password'"
-              >
-                <el-input
-                  clearable
-                  v-model="formData[item.prop]"
-                  v-bind="item.attrs"
-                  :placeholder="tf(item.attrs?.placeholder) ?? ''"
-                  :disabled="item.attrs?.disabled??loading"
-                  :show-password="item.type === 'password'"
-                />
+              <template v-if="item.type === 'input' || item.type === 'password'">
+                <el-input clearable v-model="formData[item.prop]" v-bind="item.attrs"
+                  :placeholder="tf(item.attrs?.placeholder) ?? ''" :disabled="item.attrs?.disabled ?? loading"
+                  :show-password="item.type === 'password'" />
               </template>
 
               <!-- Input Number 数字输入框 -->
               <template v-else-if="item.type === 'number'">
-                <span
-                  v-if="!!item.tipContent"
-                  slot="label"
-                  style="display: inline-block"
-                >
-                  <el-tooltip
-                    effect="dark"
-                    :content="tf(item.tipContent)"
-                    placement="top"
-                  >
-                    <el-icon
-                      :size="20"
-                      style="margin-top: 6px; margin-right: 10px"
-                      ><QuestionFilled
-                    /></el-icon>
+                <span v-if="!!item.tipContent" slot="label" style="display: inline-block">
+                  <el-tooltip effect="dark" :content="tf(item.tipContent)" placement="top">
+                    <el-icon :size="20" style="margin-top: 6px; margin-right: 10px">
+                      <QuestionFilled />
+                    </el-icon>
                   </el-tooltip>
                 </span>
-                <el-input-number
-                  v-model="formData[item.prop]"
-                  v-bind="item.attrs"
-                />
+                <el-input-number v-model="formData[item.prop]" v-bind="item.attrs" />
               </template>
 
               <!-- TreeSelect 树形选择 -->
               <template v-else-if="item.type === 'treeSelect'">
-                <el-tree-select
-                  v-model="formData[item.prop]"
-                  v-bind="item.attrs"
-                />
+                <el-tree-select v-model="formData[item.prop]" v-bind="item.attrs" />
               </template>
 
               <!-- DatePicker 日期选择器 -->
               <template v-else-if="item.type === 'datepicker'">
-                <el-date-picker
-                  v-model="formData[item.prop]"
-                  style="width: 100%"
-                  v-bind="item.attrs"
+                <el-date-picker v-model="formData[item.prop]" style="width: 100%" v-bind="item.attrs"
                   :start-placeholder="tf(item.attrs?.startPlaceholder) ?? ' '"
-                  :end-placeholder="tf(item.attrs?.endPlaceholder) ?? ' '"
-                  :disabled="loading"
-                />
+                  :end-placeholder="tf(item.attrs?.endPlaceholder) ?? ' '" :disabled="loading" />
               </template>
 
               <!-- Text 文本 -->
@@ -93,30 +49,17 @@
 
               <!-- Select 选择器 [条件筛选时候用] -->
               <template v-else-if="item.type === 'select'">
-                <el-select
-                  v-model="formData[item.prop]"
-                  v-bind="item.attrs"
-                  :placeholder="tf(item.attrs?.placeholder) ?? ''"
-                  style="width: 100%"
-                  :disabled="loading"
-                >
+                <el-select v-model="formData[item.prop]" v-bind="item.attrs"
+                  :placeholder="tf(item.attrs?.placeholder) ?? ''" style="width: 100%" :disabled="loading">
                   <template v-for="option in item.options" :key="option.id">
-                    <el-option
-                      :label="getLabel(option)"
-                      :value="getValue(option)"
-                    />
+                    <el-option :label="getLabel(option)" :value="getValue(option)" />
                   </template>
                 </el-select>
               </template>
 
               <!-- 文本域 -->
               <template v-else-if="item.type === 'textarea'">
-                <el-input
-                  v-model="formData[item.prop]"
-                  v-bind="item.attrs"
-                  type="textarea"
-                  :disabled="loading"
-                />
+                <el-input v-model="formData[item.prop]" v-bind="item.attrs" type="textarea" :disabled="loading" />
               </template>
 
               <!-- swicth切换 -->
@@ -126,10 +69,7 @@
 
               <!-- 多选 -->
               <template v-else-if="item.type === 'checkbox'">
-                <el-checkbox-group
-                  v-model="formData[item.prop]"
-                  v-bind="item.attrs"
-                >
+                <el-checkbox-group v-model="formData[item.prop]" v-bind="item.attrs">
                   <template v-for="option in item.options" :key="option.value">
                     <el-checkbox v-bind="option" :disabled="loading" />
                   </template>
@@ -138,18 +78,12 @@
 
               <!-- 上传图片 -->
               <template v-else-if="item.type === 'upload'">
-                <image-upload
-                  v-model="formData[item.prop]"
-                  v-bind="item.attrs"
-                />
+                <image-upload v-model="formData[item.prop]" v-bind="item.attrs" />
               </template>
 
               <!-- Radio 单选框 -->
               <template v-else-if="item.type === 'radio'">
-                <el-radio-group
-                  v-model="formData[item.prop]"
-                  v-bind="item.attrs"
-                >
+                <el-radio-group v-model="formData[item.prop]" v-bind="item.attrs">
                   <template v-for="option in item.options" :key="option.value">
                     <el-radio v-bind="option">
                       {{ tf(option.label!) }}
@@ -161,82 +95,43 @@
               <!-- Radio 默认日期范围 -->
               <template v-if="item.type === 'radio-button'">
                 <div class="flex w-full justify-end">
-                  <el-button
-                    v-for="(button, index) in item.buttons"
-                    :key="index"
-                    :type="selectedIndex == index ? 'primary' : ''"
-                    v-model="formData[`${item.prop}`]"
-                    @click="handleSelectDate(index, button.type, button.format)"
-                    :disabled="loading"
-                    >{{ tf(button.label) }}</el-button
-                  >
+                  <el-button v-for="(button, index) in item.buttons" :key="index"
+                    :type="selectedIndex == index ? 'primary' : ''" v-model="formData[`${item.prop}`]"
+                    @click="handleSelectDate(index, button.type, button.format)" :disabled="loading">{{ tf(button.label)
+                    }}</el-button>
                 </div>
               </template>
 
               <!-- 穿梭框 -->
               <template v-else-if="item.type === 'transfer'">
-                <el-transfer
-                  v-model="formData[item.prop]"
-                  :titles="transferTitles"
-                  filterable
-                  :filter-method="filterMethod"
-                  :filter-placeholder="tf(item.placeHolder!)??''"
-                  :data="item.data"
-                />
+                <el-transfer v-model="formData[item.prop]" :titles="transferTitles" filterable
+                  :filter-method="filterMethod" :filter-placeholder="tf(item.placeHolder!) ?? ''" :data="item.data" />
               </template>
 
               <!-- 其他参数 model弹窗 - 需要提取到model组件 -->
               <template v-else-if="item.type === 'arguments'">
                 <div class="flex flex-col flex-wrap">
                   <div class="flex align-items-center mb-6">
-                    <el-button
-                      :icon="Plus"
-                      circle
-                      class="ml-3"
-                      @click="addHeaderRow(formData[item.prop] || [])"
-                      :disabled="loading"
-                    />
+                    <el-button :icon="Plus" circle class="ml-3" @click="addHeaderRow(formData[item.prop] || [])"
+                      :disabled="loading" />
                   </div>
                   <!-- <div class="flex w-full justify-around mb-3">
                   <span>key</span>
                   <span>label</span>
                   <span>备注</span>
                 </div> -->
-                  <div
-                    class="flex gap-6 mb-3 flex-wrap w-full"
-                    v-for="(el, index) in formData[item.prop]"
-                    :key="index"
-                  >
+                  <div class="flex gap-6 mb-3 flex-wrap w-full" v-for="(el, index) in formData[item.prop]" :key="index">
                     <el-form-item prop="key">
-                      <el-input
-                        class="w-50"
-                        v-model="el.key"
-                        placeholder="key"
-                        :disabled="loading"
-                      ></el-input>
+                      <el-input class="w-50" v-model="el.key" placeholder="key" :disabled="loading"></el-input>
                     </el-form-item>
                     <el-form-item prop="label">
-                      <el-input
-                        class="w-50"
-                        v-model="el.label"
-                        placeholder="label"
-                        :disabled="loading"
-                      ></el-input>
+                      <el-input class="w-50" v-model="el.label" placeholder="label" :disabled="loading"></el-input>
                     </el-form-item>
                     <el-form-item prop="notes">
-                      <el-input
-                        class="w-50"
-                        v-model="el.note"
-                        placeholder="备注"
-                        :disabled="loading"
-                      ></el-input>
+                      <el-input class="w-50" v-model="el.note" placeholder="备注" :disabled="loading"></el-input>
                     </el-form-item>
-                    <el-button
-                      :icon="Close"
-                      circle
-                      @click="deleteHeaderRow(index, formData[item.prop] || [])"
-                      :disabled="loading"
-                    />
+                    <el-button :icon="Close" circle @click="deleteHeaderRow(index, formData[item.prop] || [])"
+                      :disabled="loading" />
                   </div>
                 </div>
               </template>
@@ -334,12 +229,12 @@ const getColLayout = (item: any, size: number | string) => {
 /**
  * 对下拉框的值并联进行处理
  */
-const getLabel = (option: {code?:string, label?:string}):string => {
-  return tf(option.code?option.code:option.label as string);
+const getLabel = (option: { code?: string, label?: string }): string => {
+  return tf(option.code ? option.code : option.label as string);
 };
 
-const getValue = (option:{code?:string, label?:string,id?:string | number,value?:string}):string|number => {
-  return option.id?option.id:option.value as string|number;
+const getValue = (option: { code?: string, label?: string, id?: string | number, value?: string }): string | number => {
+  return option.id ? option.id : option.value as string | number;
 };
 
 // 校验规则拿到实例对象 初始化
@@ -371,7 +266,7 @@ for (const item of formItems) {
         if (value === "") {
           callback(new Error(tf("message4")));
         } else if (value !== formData.value.password) {
-          console.log(tf("message5"), value, formData.value.password);
+          // console.log(tf("message5"), value, formData.value.password);
           callback(new Error(tf("message5")));
         } else {
           callback();
@@ -386,12 +281,12 @@ for (const item of formItems) {
     item.rules?.forEach((rule: any) => {
       rule.message = tf(rule.message);
     });
-    (formRules as Record<string,any>)[item.prop]= item.rules ?? [];
+    (formRules as Record<string, any>)[item.prop] = item.rules ?? [];
   }
 
   // 初始值进行赋值 -> 如果没有值则赋默认值
-  if (keys.includes(item.prop.toString()) && formData.value[item.prop] == undefined){
-    formData.value[item.prop] = item.defaultValue ?? "";
+  if (keys.includes(item.prop.toString()) && formData.value[item.prop] == undefined) {
+    formData.value[item.prop] = item.defaultValue ?? null;
   }
 
   // 初始化函数
@@ -401,7 +296,7 @@ for (const item of formItems) {
         () => formData.value[item.prop],
         (newValue, oldValue) => {
           item.watch && item.watch(newValue, oldValue, formData, formItems);
-        },{ deep: true,immediate:true }
+        }, { deep: true, immediate: true }
       );
     });
   }
@@ -521,9 +416,11 @@ defineExpose({ validateForm });
   overflow-y: scroll;
   max-height: 600px;
 }
+
 ::-webkit-scrollbar {
   display: none;
 }
+
 :deep(.el-textarea__inner) {
   height: 100px;
 }

@@ -1,19 +1,14 @@
 import { IForm, ISelectOption } from '@/base-ui/form'
 import { OptionsTypesEnum } from '@/enums/OptionsEnum'
-import BankUsersAPI from '@/api/users'
-
+import UsersAPI from '@/api/users'
+import BanksAPI from '@/api/bank'
 
 export const modalConfig: IForm = {
   formAction: function (data, isEdit) {
-    // let id = data.id;
-    // let param = {
-    //   code: data.code,
-    //   name: data.name,
-    // }
     if (isEdit) {
-      return BankUsersAPI.getUsersPage(data);
+      return UsersAPI.updateUsers(data);
     } else {
-      return BankUsersAPI.getUsersPage(data);
+      return UsersAPI.updateUsers(data);
     }
   },
   formItems: [
@@ -24,11 +19,14 @@ export const modalConfig: IForm = {
       attrs: {
         placeholder: "请输入id",
       },
+      defaultValue: '',
+      isHidden: true
     },
     {
       prop: "username",
       type: "input",
       label: "用户名",
+      defaultValue: '',
       attrs: {
         placeholder: "请输入用户名",
       },
@@ -42,18 +40,29 @@ export const modalConfig: IForm = {
     },
     {
       prop: "bank",
-      type: "input",
+      type: "select",
       label: "银行",
       attrs: {
         placeholder: "请输入银行",
       },
+      defaultValue: '',
+      options: [],
       rules: [
         {
           required: true,
-          message: "请输入银行",
+          message: "请选择银行",
           trigger: "blur",
         }
-      ]
+      ],
+      async initFn(formItem) {
+        let { data } = await BanksAPI.getBanksOptions()
+        this.options = data.map((item: ISelectOption) => {
+          return {
+            label: item,
+            value: item
+          }
+        })
+      },
     },
     {
       prop: "acct",
@@ -81,6 +90,21 @@ export const modalConfig: IForm = {
         {
           required: true,
           message: "请输入登录账号",
+          trigger: "blur",
+        }
+      ]
+    },
+    {
+      prop: "pwd",
+      type: "input",
+      label: "密码",
+      attrs: {
+        placeholder: "请输入密码",
+      },
+      rules: [
+        {
+          required: true,
+          message: "请输入密码",
           trigger: "blur",
         }
       ]

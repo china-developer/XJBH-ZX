@@ -5,11 +5,6 @@ import BanksAPI from '@/api/bank'
 
 export const modalConfig: IForm = {
   formAction: function (data, isEdit) {
-    // let id = data.id;
-    // let param = {
-    //   code: data.code,
-    //   name: data.name,
-    // }
     if (isEdit) {
       return BanksAPI.updateBanksPage(data);
     } else {
@@ -21,9 +16,11 @@ export const modalConfig: IForm = {
       prop: "id",
       type: "input",
       label: "id",
+      defaultValue: '',
       attrs: {
         placeholder: "请输入id",
       },
+      isHidden: true
     },
     {
       prop: "code",
@@ -32,6 +29,7 @@ export const modalConfig: IForm = {
       attrs: {
         placeholder: "placeholder3",
       },
+      defaultValue: '',
       rules: [
         {
           required: true,
@@ -44,6 +42,7 @@ export const modalConfig: IForm = {
       prop: "name",
       type: "input",
       label: "label4",
+      defaultValue: '',
       attrs: {
         placeholder: "placeholder4",
       },

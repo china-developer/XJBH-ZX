@@ -15,7 +15,7 @@
                   删除
                 </el-button> -->
           </div>
-          <div>
+          <div v-if="isOut">
             <el-button class="ml-3" :disabled="loading" :loading="downLoading" @click="handleOpenExportsModal">
               <template #icon><i-ep-download /></template>
               {{ tt("export") }}
@@ -198,7 +198,7 @@
           </el-button>
           <el-button @click="handleCloseExportsModal">{{
             tt("cancel")
-            }}</el-button>
+          }}</el-button>
         </div>
       </template>
     </el-dialog>

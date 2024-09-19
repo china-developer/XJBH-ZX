@@ -6,7 +6,7 @@
     </el-card>
     <el-card shadow="never" class="table-container">
       <page-content ref="contentRef" :parameterVal="searchFormData" :contentConfig="<IContentConfig>contentTableConfig"
-        @newBtnClick="handleAddClick" @editBtnClick="handleEditClick" @exportBtnClick="handleExportClick" isOut />
+        @newBtnClick="handleAddClick" @editBtnClick="handleEditClick" @exportBtnClick="handleExportClick" />
     </el-card>
 
     <!-- 新建表单弹窗 -->
@@ -33,6 +33,18 @@ watchSwitchLang(() => {
   searchFormConfig
 })
 
+// 新建单独处理
+const newHandleCallback = () => {
+  const idItem = modelConfigAdd.formItems?.find((item) => item.prop === "id");
+  idItem!.isHidden = true;
+};
+
+// 编辑单独处理
+const editHandleCallback = () => {
+  const idItem = modelConfigEdit.formItems?.find((item) => item.prop === "id");
+  idItem!.isHidden = true;
+};
+
 // 查询 - 表格 联动默认状态
 const loading = ref(false);
 const setLoading = (value: boolean) => {
@@ -47,7 +59,7 @@ const searchFormData = ref({
   username: "",
   acct: "",
   uid: "",
-  status: true,
+  status: null,
 })
 
 // 处理的hook
@@ -62,7 +74,7 @@ const {
   handleExportClick,
   handleSearchClick,
   handleResetClick,
-} = usePage();
+} = usePage(newHandleCallback, editHandleCallback, undefined, searchFormData.value);
 </script>
 
 <style lang="scss" scoped>

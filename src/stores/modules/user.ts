@@ -2,7 +2,6 @@ import router, { resetRouter } from "@/router";
 import { TOKEN_KEY, REF_TOKEN_KEY } from "@/enums/CacheEnum";
 import { store } from "@/stores";
 import AuthAPI, { LoginData } from "@/api/auth";
-import UserAPI from "@/api/user";
 import { setTimeStamp } from '@/utils/auth'
 const route = useRoute();
 
@@ -26,7 +25,7 @@ export const useUserStore = defineStore("user", () => {
     return new Promise<void>((resolve, reject) => {
       AuthAPI.login(loginData)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           // 保存登录时间
           setTimeStamp()
           localStorage.setItem(TOKEN_KEY, res.data.access_token!);

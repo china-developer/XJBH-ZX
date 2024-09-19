@@ -12,8 +12,9 @@ const usePage = (
   editHandleCallback?: CallbackFn,
   // 对数据回写处理
   writeBackCallback?: (row: any) => any,
+  searchFormData: object = {}
 ) => {
-  console.log(editHandleCallback);
+  // console.log(editHandleCallback);
   // 获取实例组件
   const searchRef = ref<InstanceType<typeof PageSearch>>();
   const contentRef = ref<InstanceType<typeof PageContent>>();
@@ -34,9 +35,8 @@ const usePage = (
 
   // 表单提交
   function handleSubmitClick() {
-    const searchObj = Object.assign({},searchRef.value.formData)
     //根据检索条件刷新列表数据
-    contentRef.value?.fetchPageData(searchObj, true);
+    contentRef.value?.fetchPageData(searchFormData, true);
   }
 
   // 新增

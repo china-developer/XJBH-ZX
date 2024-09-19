@@ -10,6 +10,7 @@ export const searchFormConfig: IForm = {
       attrs: {
         placeholder: "name",
       },
+      defaultValue: '',
       rules: [],
       // async initFn(formItem) {
       //   // 注意:如果initFn函数不是箭头函数,this会指向此配置项对象,那么也就可以用this来替代形参formItem

@@ -7,7 +7,15 @@ import axios, {
 import { ErrMessage } from "./status";
 import { TOKEN_KEY, REF_TOKEN_KEY } from "@/enums/CacheEnum";
 import router from "@/router";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"
+
+// 刷新token后的任务队列
+let refreshTokenArray: ((t: string) => any)[] = [];
+
+// 最大重发次数
+const MAX_ERROR_COUNT = 5;
+// 当前重发次数
+let currentCount = 0;
 
 // 自定义请求返回数据的类型
 interface Data<T> {
@@ -85,36 +93,29 @@ class Request {
 
   // 自定义拦截器
   setupInterceptor(): void {
-    let isRefreshing = false;
-    let refreshSubscribers: ((token: string) => void)[] = [];
-
-    const onRrefreshed = (token: string) => {
-      refreshSubscribers.map((cb) => cb(token));
-    };
-
-    const addRefreshSubscriber = (cb: (token: string) => void) => {
-      refreshSubscribers.push(cb);
-    };
+    let isRefreshing = false; // 是否正在刷新token
 
     const handleRefreshToken = async (refreshToken: string) => {
-      try {
-        const { data } = await axios.get('/api/cert/token/refresh', {
-          headers: {
-            'Authorization': `Bearer ${refreshToken}`,
-          },
-        });
+      if (refreshToken) {
+        try {
+          const { data } = await this.get('/api/cert/token/refresh', {}, {
+            headers: {
+              'Authorization': `Bearer ${refreshToken}`,
+            },
+          });
 
-        const newToken = data.access_token;
-        const newRefToken = data.refresh_token;
+          const newToken = data.access_token;
+          const newRefToken = data.refresh_token;
 
-        localStorage.setItem(TOKEN_KEY, newToken);
-        localStorage.setItem(REF_TOKEN_KEY, newRefToken);
+          localStorage.setItem(TOKEN_KEY, newToken);
+          localStorage.setItem(REF_TOKEN_KEY, newRefToken);
 
-        return newToken;
-      } catch (err) {
-        localStorage.setItem(TOKEN_KEY, "");
-        router.push(`/login`);
-        return Promise.reject(err);
+          return newToken;
+        } catch (err) {
+          // localStorage.setItem(TOKEN_KEY, "");
+          // router.push(`/login`);
+          return Promise.reject(err);
+        }
       }
     };
 
@@ -128,6 +129,12 @@ class Request {
           this.loading = true;
         }
         let token = localStorage.getItem(TOKEN_KEY);
+        // token 未过期，直接使用
+        config.headers.Authorization = `Bearer ${token}`;
+        // // 登录接口和刷新token接口绕过
+        // if (config.url.indexOf('/refresh') >= 0 || config.url.indexOf('/login') >= 0) {
+        //   return config
+        // }
         if (token) {
           // 解析 token
           const decodedToken: any = jwtDecode(token);
@@ -135,27 +142,38 @@ class Request {
 
           // 如果 token 已过期
           if (decodedToken.exp < currentTime) {
-            console.log('失效了===>', decodedToken.exp)
+            console.log('失效了===>', decodedToken.exp);
             // Token 已过期，使用 refreshToken 获取新的 token
-            const refreshToken = localStorage.getItem(REF_TOKEN_KEY);
+            const refreshToken = localStorage.getItem(REF_TOKEN_KEY) as string;
 
             if (!isRefreshing) {
+              //刷新token锁为true
               isRefreshing = true;
+
               try {
-                token = await handleRefreshToken(refreshToken!);
-                // 将新的 token 添加到请求头
+                token = await handleRefreshToken(refreshToken);
                 config.headers.Authorization = `Bearer ${token}`;
-                isRefreshing = false;
-                onRrefreshed(token!);
+                // 执行获取token后的任务队列
+                refreshTokenArray.forEach((cb) => cb(token as string));
+                // 清空任务队列
+                refreshTokenArray = [];
               } catch (err) {
                 return Promise.reject(err);
+              } finally {
+                //刷新token锁为false
+                isRefreshing = false;
               }
             }
-          } else {
-            // 如果 token 未过期，将 token 添加到请求头
-            config.headers.Authorization = `Bearer ${token}`;
+            // 如果当前正在请求
+            // return new Promise((resolve) => {
+            //   // 将当前请求添加到队列中
+            //   refreshTokenArray.push((newToken: string) => {
+            //     // 将新的 token 添加到请求头
+            //     config.headers.Authorization = `Bearer ${newToken}`;
+            //     resolve(this.instance(config));
+            //   });
+            // });
           }
-
         }
         return config;
       }
@@ -171,27 +189,42 @@ class Request {
         const { response, message } = err;
         const originalRequest = err.config;
 
-
         if (this.loading) this.loading = false;
-
         // 处理401 登录失败
         if (response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
+          let newToken = '';
           if (!isRefreshing) {
             isRefreshing = true;
-            const refreshToken = localStorage.getItem(REF_TOKEN_KEY);
+            const refreshToken = localStorage.getItem(REF_TOKEN_KEY) as string;
             try {
-              const newToken = await handleRefreshToken(refreshToken!);
-              isRefreshing = false;
-
-              onRrefreshed(newToken);
-              // 将新的 token 添加到请求头
+              newToken = await handleRefreshToken(refreshToken);
               originalRequest.headers.Authorization = `Bearer ${newToken}`;
               // 重新发起请求
               return this.instance(originalRequest);
             } catch (err) {
               return Promise.reject(err);
+            } finally {
+              // 无论成功失败消除刷新token锁
+              isRefreshing = false;
             }
+          } else {
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            return this.instance(originalRequest)
+            // 如果当前正在请求
+            // return new Promise((resolve) => {
+            //   // 将当前请求添加到队列中
+            //   refreshTokenArray.push((newToken: string) => {
+            //     // 确保 headers 存在
+            //     if (!originalRequest.headers) {
+            //       originalRequest.headers = {};
+            //     }
+            //     // 将新的 token 添加到请求头
+            //     originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            //     resolve(this.instance(originalRequest));
+            //   });
+
+
           }
         }
 
@@ -200,10 +233,10 @@ class Request {
           ElMessage.error(response.data.message);
         } else {
           // 根据不同状态码，返回不同信息
-          const messageStr = response
-            ? ErrMessage(response.status)
-            : message || '请求失败，请重试';
-          ElMessage.error(messageStr);
+          // const messageStr = response
+          //   ? ErrMessage(response.status)
+          //   : message || '请求失败，请重试';
+          // ElMessage.error(messageStr);
         }
         return Promise.reject(err);
       }

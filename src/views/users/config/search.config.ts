@@ -1,5 +1,6 @@
 import { IForm, ISelectOption } from '@/base-ui/form'
 import { OptionsTypesEnum } from '@/enums/OptionsEnum'
+import BanksAPI from '@/api/bank'
 
 export const searchFormConfig: IForm = {
   formItems: [
@@ -10,6 +11,7 @@ export const searchFormConfig: IForm = {
       attrs: {
         placeholder: "请输入用户名",
       },
+      defaultValue: '',
       rules: [],
       colLayout: {
         xl: 4, // ≥1920px
@@ -21,12 +23,23 @@ export const searchFormConfig: IForm = {
     },
     {
       prop: "bank",
-      type: "input",
+      type: "select",
       label: "银行",
       attrs: {
-        placeholder: "请输入银行",
+        placeholder: "请选择银行",
       },
+      defaultValue: '',
       rules: [],
+      options: [],
+      async initFn(formItem) {
+        let { data } = await BanksAPI.getBanksOptions()
+        this.options = data.map((item: ISelectOption) => {
+          return {
+            label: item,
+            value: item
+          }
+        })
+      },
       colLayout: {
         xl: 4, // ≥1920px
         lg: 6, // ≥1200px
@@ -42,6 +55,7 @@ export const searchFormConfig: IForm = {
       attrs: {
         placeholder: "请输入转账账号",
       },
+      defaultValue: '',
       rules: [],
       colLayout: {
         xl: 4, // ≥1920px
@@ -58,6 +72,7 @@ export const searchFormConfig: IForm = {
       attrs: {
         placeholder: "请输入登录账号",
       },
+      defaultValue: '',
       rules: [],
       colLayout: {
         xl: 4, // ≥1920px
@@ -75,8 +90,12 @@ export const searchFormConfig: IForm = {
         placeholder: "请选择状态",
       },
       rules: [],
-      defaultValue: true,
+      defaultValue: null,
       options: [
+        {
+          label: "全部",
+          value: null,
+        },
         {
           label: "启用",
           value: true,

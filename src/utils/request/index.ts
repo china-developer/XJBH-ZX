@@ -1,6 +1,5 @@
 import Request from "./request";
 import { API_BASE_URL, TIME_OUT } from "./config";
-// import { TOKEN_KEY } from "@/enums/CacheEnum";
 // import { useUserStore } from "@/stores";
 // import { isCheckTimeout } from "@/utils/auth";
 

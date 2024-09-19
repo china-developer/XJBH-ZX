@@ -2,7 +2,7 @@
 
 export interface ISelectOption {
   label?: string;
-  value?: any;
+  value?: any | null;
   code?: string;
   id?: any;
   name?: any;

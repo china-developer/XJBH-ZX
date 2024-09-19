@@ -79,14 +79,14 @@ const handleConfirmClick = useThrottleFn(async () => {
   let flag = await ruleFormRef.value?.validateForm();
   if (flag) {
     // ElMessage.success("已通过检查！");
-    console.log("表单数据====>", formData.value);
+    // console.log("表单数据====>", formData.value);
     // 判断【新建】or【编辑】
     if (Object.keys(props.defaultInfo).length) {
       isEdit.value = true;
-      console.log("编辑");
+      // console.log("编辑");
     } else {
       isEdit.value = false;
-      console.log("新建");
+      // console.log("新建");
     }
     //校验通过的代码
     if (typeof props.modalConfig.beforeSubmit === "function") {
