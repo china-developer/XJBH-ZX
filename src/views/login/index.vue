@@ -16,7 +16,7 @@
         <el-form-item prop="email">
           <div class="flex-y-center w-full">
             <svg-icon icon-class="user" class="mx-2" />
-            <el-input ref="user" v-model="loginData.user" :placeholder="$t('login.user')" name="user" size="large"
+            <el-input ref="user" v-model="loginData.user" :placeholder="$t('login.username')" name="user" size="large"
               class="h-[48px]" />
           </div>
         </el-form-item>
@@ -100,11 +100,8 @@ const handelChangeLang = (item) => {
 };
 
 const loginData = ref({
-  user: "ZW",
-  password: "789798789",
-  // withCredentials: true,
-  // remember: true,
-  // pa_google: "",
+  user: "",
+  password: "",
 });
 
 const languageData = ref({
