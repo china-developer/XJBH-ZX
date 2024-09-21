@@ -37,13 +37,11 @@ const emit = defineEmits(["queryBtnClick", "resetBtnClick"]);
 const originFormData: IFormData = {};
 const formItems = props.searchConfig.formItems ?? [];
 for (const formItem of formItems) {
-  console.log(formItem)
   formItem.initFn && formItem.initFn(formItem);
   originFormData[`${formItem.prop}`] = formItem.defaultValue;
 }
 
 const formData = ref<IFormData>({ ...originFormData });
-// console.log('formData====>111', formData)
 
 // 自定义事件
 let transferDate: any = ref([]);

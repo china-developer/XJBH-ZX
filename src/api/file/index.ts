@@ -1,4 +1,4 @@
-import { ZXRequest } from "@/utils/request/index";
+import request from "@/utils/request";
 class FileAPI {
   /**
    * 文件上传地址
@@ -13,7 +13,7 @@ class FileAPI {
   static upload(file: File) {
     const formData = new FormData();
     formData.append("file", file);
-    return ZXRequest.post<any>(
+    return request.post<any>(
       "/api/v1/files",
       { data: formData },
       {
@@ -30,7 +30,7 @@ class FileAPI {
    * @param filePath 文件完整路径
    */
   static deleteByPath(filePath?: string) {
-    return ZXRequest.delete<any>("/api/v1/files", {
+    return request.delete<any>("/api/v1/files", {
       params: { filePath: filePath },
     });
   }
@@ -41,18 +41,18 @@ class FileAPI {
    * @param fileName
    */
   static async downloadFile(uploadUrl: string, fileName?: string): Promise<void> {
-    try {
-      const res = await ZXRequest.get<any>(uploadUrl, {}, { responseType: "blob" });
-      const blob = new Blob([res.data as any]);
-      const a = document.createElement("a");
-      const url = window.URL.createObjectURL(blob); // 这里是新的 url 变量
-      a.href = url;
-      a.download = fileName || "下载文件";
-      a.click();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error downloading file:", error);
-    }
+    // try {
+    //   const res = await request.get<any>(uploadUrl, {}, { responseType: "blob" });
+    //   const blob = new Blob([res.data as any]);
+    //   const a = document.createElement("a");
+    //   const url = window.URL.createObjectURL(blob); // 这里是新的 url 变量
+    //   a.href = url;
+    //   a.download = fileName || "下载文件";
+    //   a.click();
+    //   window.URL.revokeObjectURL(url);
+    // } catch (error) {
+    //   console.error("Error downloading file:", error);
+    // }
   }
 }
 

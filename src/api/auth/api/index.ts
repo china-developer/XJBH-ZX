@@ -1,13 +1,20 @@
-import { ZXRequest } from "@/utils/request/index";
+import request from "@/utils/request";
 import { AxiosPromise } from "axios";
 import { LoginResult, LoginData } from "../types";
 
 enum AuthEnum {
   Login = "/api/cert/login",
+  // Login = "/user/login",
+
   Csrf = "/sanctum/csrf-cookie",
   Logout = "/logout",
   DelTokens = "/api/admin/auth/tokens",
+
   RefTokens = "/api/cert/token/refresh",
+  // RefTokens = "/user/refresh",
+
+  // 测试
+  UserInfo = "/user/info?id=1",
 
   // 双重验证
   twoFactorOn = "/user/two-factor-authentication",
@@ -24,77 +31,25 @@ enum AuthEnum {
 class AuthAPI {
   // 登录
   static login(data: LoginData): AxiosPromise<LoginResult> {
-    return ZXRequest.post<any>(AuthEnum.Login, data);
+    return request({
+      url: AuthEnum.Login,
+      method: "post",
+      data: data,
+    });
   }
 
-  // CORS
-  static csrfCookie(): AxiosPromise {
-    return ZXRequest.get<any>(AuthEnum.Csrf);
-  }
-
-  // 退出登录
-  static logout(): AxiosPromise {
-    return ZXRequest.delete<any>(AuthEnum.Logout);
-  }
-
-  // 删除token
-  static delTokens(): AxiosPromise {
-    return ZXRequest.delete<any>(AuthEnum.DelTokens);
-  }
 
   // 刷新token
-  static refTokens(): AxiosPromise {
-    return ZXRequest.get<any>(AuthEnum.RefTokens);
-  }
+  // static refTokens(refreshToken: string): AxiosPromise {
+  //   return request({
+  //     url: AuthEnum.RefTokens,
+  //     method: "get",
+  //     headers: {
+  //       "Authorization": `Bearer ${refreshToken}`
+  //     },
+  //   });
+  // }
 
-  // 双因素认证 获取二维码
-  static twoFactorQrcode(): AxiosPromise {
-    return ZXRequest.get<any>(AuthEnum.twoFactorQr);
-  }
 
-  // 开启双因素认证
-  static twoFactorAuthenticationOn(): AxiosPromise {
-    return ZXRequest.post<any>(AuthEnum.twoFactorOn);
-  }
-
-  // 关闭双因素认证
-  static twoFactorAuthenticationOff(): AxiosPromise {
-    return ZXRequest.delete<any>(AuthEnum.twoFactorOn);
-  }
-
-  // 验证登录密码
-  static confirmPassword(password: string): AxiosPromise {
-    return ZXRequest.post<any>(AuthEnum.twoFactorVerify, { data: password });
-  }
-
-  // 获取登录密码状态
-  static getConfirmedPasswordStatus(): AxiosPromise {
-    return ZXRequest.get<any>(AuthEnum.twoFactorStatus);
-  }
-
-  // 获取双因素认证密钥
-  static twoFactorSecretKey(): AxiosPromise {
-    return ZXRequest.get<any>(AuthEnum.twoFactorKey);
-  }
-
-  // 确认双因素认证开启
-  static confirmedTwoFactorAuthentication(code: string): AxiosPromise {
-    return ZXRequest.post<any>(AuthEnum.twoFactorOk, { data: code });
-  }
-
-  // 获取恢复代码
-  static twoFactorRecoveryCodes(): AxiosPromise {
-    return ZXRequest.get<any>(AuthEnum.twoFactorGetCode);
-  }
-
-  // 重新生成恢复代码
-  static twoFactorRecoveryCodesCreate(): AxiosPromise {
-    return ZXRequest.post<any>(AuthEnum.twoFactorRecoverCode);
-  }
-
-  // 使用 Google Authenticator 验证
-  static loginTwoFactorApi(code: string): AxiosPromise {
-    return ZXRequest.post<any>(AuthEnum.twoFactorGoogleCode, { data: code });
-  }
 }
 export default AuthAPI;

@@ -22,11 +22,7 @@
     "paths": {
       "@/*": ["src/*"] // “*”代表src下的任何文件
     },
-    "types": [
-      "vite/client",
-      "unplugin-icons/types/vue",
-      "element-plus/global",
-    ]
+    "types": ["vite/client", "unplugin-icons/types/vue", "element-plus/global"]
   },
   "include": [
     "mock/**/*.ts",
@@ -35,7 +31,9 @@
     "vite.config.ts",
     "types/**.d.ts",
     "src/settings.js",
-    "src/main.js"
-, "src/components/HeaderSearch/FuseData.js"  ],
+    "src/main.js",
+    "src/components/HeaderSearch/FuseData.js",
+    "src/utils/request/index.js"
+  ],
   "exclude": ["node_modules", "dist", "**/*.js"]
 }

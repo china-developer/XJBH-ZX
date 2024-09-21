@@ -4,8 +4,8 @@ import { IContentConfig } from "@/components/page-content";
 export const contentTableConfig: IContentConfig = {
   title: "",
   pk: "id",
-  indexAction: function (queryParams: any) {
-    return BanksAPI.getBanksPage(queryParams);
+  indexAction: function () {
+    return BanksAPI.getBanksPage();
   },
   deleteAction: function (ids) {
     return BanksAPI.deleteBanksPage(ids);

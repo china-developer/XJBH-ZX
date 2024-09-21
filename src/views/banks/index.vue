@@ -4,6 +4,7 @@
       <page-search :searchConfig="searchFormConfig" @queryBtnClick="handleSearchClick"
         @resetBtnClick="handleResetClick" />
     </el-card> -->
+
     <el-card shadow="never" class="table-container">
       <page-content ref="contentRef" :contentConfig="<IContentConfig>contentTableConfig" @newBtnClick="handleAddClick"
         @editBtnClick="handleEditClick" @exportBtnClick="handleExportClick" />
@@ -28,6 +29,7 @@ import { modelConfigAdd, modelConfigEdit } from "./config/modal.config";
 import { searchFormConfig } from "./config/search.config";
 
 import { watchSwitchLang } from '@/utils/i18n'
+import AuthAPI from '@/api/auth'
 
 // 表格表单国际监听
 watchSwitchLang(() => {
@@ -42,6 +44,13 @@ const setLoading = (value: boolean) => {
 };
 provide("loading", loading);
 provide("setLoading", setLoading);
+
+// 测试
+// const getUserInfo = () => {
+//   AuthAPI.getUserInfo().then((res: any) => {
+//     console.log(res)
+//   })
+// }
 
 // 处理的hook
 const {

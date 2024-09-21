@@ -2,16 +2,16 @@ import router from "@/router";
 import {
   RouteRecordRaw,
 } from "vue-router";
-import { useUserStore, usePermissionStore  } from "@/stores";
+import { useUserStore, usePermissionStore } from "@/stores";
 import NProgress from "@/utils/nprogress";
 import { TOKEN_KEY } from "@/enums/CacheEnum";
 import i18n from "@/lang";
 const { t } = i18n.global;
 
-export function setupPermission () {
+export function setupPermission() {
   // 白名单路由
   const whiteList = ["/login"];
-  
+
   router.beforeEach(async (to, from, next) => {
     NProgress.start();
     const hasToken = localStorage.getItem(TOKEN_KEY);
@@ -25,7 +25,7 @@ export function setupPermission () {
         const userStore = useUserStore();
         const hasRoles = userStore.user.roles && userStore.user.roles.length > 0;
 
-        if(hasRoles) {
+        if (hasRoles) {
           // console.log('hasRoles-true')
           // 未匹配到任何路由，跳转404
           if (to.matched.length === 0) {
@@ -36,19 +36,18 @@ export function setupPermission () {
             next();
           }
         }
-         else {
+        else {
           const permissionStore = usePermissionStore();
           try {
             const userInfo = await userStore.getUserInfo();
-            let roles = (userInfo as {roles:string[]})?.roles || [];
-            console.log('userInfo',userInfo)
+            let roles = (userInfo as { roles: string[] })?.roles || [];
             const accessRoutes = await permissionStore.generateRoutes(roles);
-            accessRoutes.forEach((route:RouteRecordRaw) => {
+            accessRoutes.forEach((route: RouteRecordRaw) => {
               router.addRoute(route);
             });
             console.log(5)
             next(to.path);
-  
+
           } catch (error) {
             // 移除 token 并跳转登录页
             // await userStore.resetToken();

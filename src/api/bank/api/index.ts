@@ -1,4 +1,4 @@
-import { ZXRequest } from "@/utils/request/index";
+import request from "@/utils/request";
 import { AxiosPromise } from "axios";
 import { BanksPageVO, WithdrawPageVO } from "../types";
 
@@ -7,6 +7,10 @@ import { BanksPageVO, WithdrawPageVO } from "../types";
  */
 enum BanksEnum {
   ListPage = "/api/bank/list",
+
+  // 测试
+  // ListPage = "/user/info?id=1",
+
   OpationsPage = "/api/bank/dropDown",
   SavePage = "/api/bank/save",
   DelPage = "/api/bank/delete"
@@ -16,15 +20,21 @@ class BanksAPI {
   /**
    * 银行分页数据
    */
-  static getBanksPage(data?: object): AxiosPromise<PageResult<BanksPageVO[]>> {
-    return ZXRequest.get<any>(BanksEnum.ListPage);
+  static getBanksPage(): AxiosPromise<PageResult<BanksPageVO[]>> {
+    return request({
+      url: BanksEnum.ListPage,
+      method: "get",
+    });
   }
 
   /**
    * 银行下拉数据
    */
   static getBanksOptions(): AxiosPromise<any> {
-    return ZXRequest.get<any>(BanksEnum.OpationsPage);
+    return request({
+      url: BanksEnum.OpationsPage,
+      method: "get",
+    });
   }
 
 
@@ -32,14 +42,21 @@ class BanksAPI {
    * 更新银行数据
    */
   static updateBanksPage(data: object): AxiosPromise<PageResult<BanksPageVO[]>> {
-    return ZXRequest.post<any>(BanksEnum.SavePage, data);
+    return request({
+      url: BanksEnum.SavePage,
+      data: data,
+      method: "post",
+    });
   }
 
   /**
    * 删除银行数据
    */
   static deleteBanksPage(id: string & number): AxiosPromise<PageResult<BanksPageVO[]>> {
-    return ZXRequest.get<any>(BanksEnum.DelPage + '/' + id);
+    return request({
+      url: BanksEnum.DelPage + '/' + id,
+      method: "get",
+    });
   }
 
 

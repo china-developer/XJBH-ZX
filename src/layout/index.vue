@@ -39,7 +39,7 @@
 
 <script setup>
 import { useAppStore, useSettingsStore, usePermissionStore } from "@/stores";
-import  defaultSettings  from "@/settings";
+import defaultSettings from "@/settings";
 import { LayoutEnum } from '@/enums/LayoutEnum';
 import { DeviceEnum } from '@/enums/DeviceEnum';
 

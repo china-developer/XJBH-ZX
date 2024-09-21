@@ -198,7 +198,7 @@
           </el-button>
           <el-button @click="handleCloseExportsModal">{{
             tt("cancel")
-          }}</el-button>
+            }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -445,9 +445,13 @@ function fetchPageData(formData: IObject = {}, isRestart = false) {
       // 如果有分页，则显示条数
       if (showPagination) {
         // paginationval.value.total = res.meta.total ?? res.data.length;
-        pageData.value = res.data;
+        nextTick(() => {
+          pageData.value = res.data;
+        })
       } else {
-        pageData.value = res.data;
+        nextTick(() => {
+          pageData.value = res.data;
+        })
       }
     })
     .finally(() => {
