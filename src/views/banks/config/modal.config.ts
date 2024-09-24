@@ -1,5 +1,4 @@
 import { IForm, ISelectOption } from '@/base-ui/form'
-import { OptionsTypesEnum } from '@/enums/OptionsEnum'
 import BanksAPI from '@/api/bank'
 
 
@@ -53,6 +52,32 @@ export const modalConfig: IForm = {
           trigger: "blur",
         }
       ]
+    },
+    {
+      prop: "env",
+      type: "select",
+      label: "环境",
+      attrs: {
+        placeholder: "请选择环境",
+      },
+      defaultValue: '',
+      options: [],
+      rules: [
+        {
+          required: true,
+          message: "请选择环境",
+          trigger: "blur",
+        }
+      ],
+      async initFn(formItem) {
+        let { data } = await BanksAPI.getEnvOptions()
+        this.options = data.map((item: ISelectOption) => {
+          return {
+            label: item.name,
+            value: item.url
+          }
+        })
+      },
     },
   ],
   colLayout: { span: 24 },

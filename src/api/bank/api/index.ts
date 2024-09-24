@@ -12,6 +12,8 @@ enum BanksEnum {
   // ListPage = "/user/info?id=1",
 
   OpationsPage = "/api/bank/dropDown",
+  EnvOptionsPage = "/api/bank/envList",
+
   SavePage = "/api/bank/save",
   DelPage = "/api/bank/delete"
 }
@@ -37,6 +39,15 @@ class BanksAPI {
     });
   }
 
+  /**
+   * 环境下拉数据
+   */
+  static getEnvOptions(): AxiosPromise<any> {
+    return request({
+      url: BanksEnum.EnvOptionsPage,
+      method: "get",
+    });
+  }
 
   /**
    * 更新银行数据

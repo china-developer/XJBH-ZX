@@ -92,6 +92,34 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: "/message",
+    component: Layout,
+    name: "message",
+    redirect: "/message",
+    meta: {
+      alwaysShow: false,
+      hidden: false,
+      keepAlive: true,
+      icon: "users",
+      roles: ["ADMIN"]
+    },
+    children: [
+      {
+        component: () => import("@/views/message/index.vue"),
+        name: "message",
+        path: "/message",
+        meta: {
+          alwaysShow: false,
+          hidden: false,
+          keepAlive: true,
+          icon: "users",
+          roles: ["ADMIN"],
+          title: "r11"
+        }
+      }
+    ]
+  },
 ];
 
 

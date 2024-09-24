@@ -4,6 +4,7 @@ export interface ISelectOption {
   label?: string;
   value?: any | null;
   code?: string;
+  url?: string;
   id?: any;
   name?: any;
 }

@@ -43,7 +43,7 @@ export const modalConfig: IForm = {
       type: "select",
       label: "银行",
       attrs: {
-        placeholder: "请输入银行",
+        placeholder: "请选择银行",
       },
       defaultValue: '',
       options: [],
