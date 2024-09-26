@@ -167,11 +167,11 @@ const access_token = localStorage.getItem(TOKEN_KEY)
 const refresh_token = localStorage.getItem(REF_TOKEN_KEY);
 const baseApi = import.meta.env.VITE_APP_BASE_API;
 
-const socket = io(baseApi+'/wss', {
+const socket = io('https://python.thai2570.com', {
   reconnectionDelayMax: 10000,
   reconnection: false, // 禁用自动重连
   auth: {
-    token: ''
+    token: access_token
   }
 });
 

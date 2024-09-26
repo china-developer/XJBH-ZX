@@ -136,6 +136,7 @@ request.interceptors.response.use(
         // return Promise.reject(new Error(message || "Error"));
     },
     (error: any) => {
+        console.log('报错', error.message)
         if (error.response) {
             // token 过期,重新登录
             if (error.response.status === 401) {
@@ -146,8 +147,22 @@ request.interceptors.response.use(
                     router.push("/login");
                 });
             } else {
-                console.log(error.message);
                 ElMessage.error(error.response.data.message || "系统出错");
+            }
+        }
+        if (error.message.includes('Network Error')) {
+            // 排除/login路由页面
+            if (router.currentRoute.value.path !== '/login') {
+                ElMessageBox.confirm("当前页面已失效，请重新登录", "提示", {
+                    confirmButtonText: "确定",
+                    type: "warning",
+                }).then(() => {
+                    localStorage.setItem(TOKEN_KEY, "");
+                    localStorage.setItem(REF_TOKEN_KEY, "");
+                    router.push({
+                        path: '/login'
+                    });
+                });
             }
         }
         return Promise.reject(error.message);
